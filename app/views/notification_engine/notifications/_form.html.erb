@@ -1,0 +1,60 @@
+<%= form_with(model: notification) do |form| %>
+  <% if notification.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(notification.errors.count, "error") %> prohibited this notification from being saved:</h2>
+
+      <ul>
+        <% notification.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="d-flex flex-row align-items-center mb-3">
+    <div class="form-outline flex-fill mb-0">
+      <%= form.label :title, class: "form-label" %><br/>
+      <%= form.text_field :title, autofocus: true, autocomplete: "title", class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="d-flex flex-row align-items-center mb-3">
+    <div class="form-outline flex-fill mb-0">
+      <%= form.label :content, class: "form-label" %><br/>
+      <%= form.text_area :content, autofocus: true, autocomplete: "content", class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="d-flex flex-row align-items-center mb-3">
+    <div class="form-outline flex-fill mb-0">
+      <%= form.label :importance, class: "form-label" %><br/>
+      <%= select_tag :importance, options_for_select(NotificationEngine::Notification.importances.map { |k, v| [k.humanize.titlecase, v] }), name: 'notification[importance]', class: 'form-control' %>
+    </div>
+  </div>
+
+  <div class="d-flex flex-row align-items-center mb-3">
+    <div class="form-outline flex-fill mb-0">
+      <%= form.label :day, class: "form-label" %><br/>
+      <%= form.datetime_field :day, class: 'form-control' %>
+    </div>
+  </div>
+
+
+  <div class="d-flex flex-row align-items-center mb-3">
+    <div class="form-outline flex-fill mb-0">
+      <%= form.label :tag, class: "form-label" %><br/>
+      <%= form.text_field :tag, autofocus: true, autocomplete: "tag", class: "form-control" %>
+    </div>
+  </div>
+
+  <% users.each do |user| %>
+    <div>
+      <%= check_box_tag "notification[user_id]", user.id, notification.user %>
+      <%= user.email %>
+    </div>
+  <% end %>
+
+    <%= form.submit "Create Notification", class: "btn btn-primary mt-3" %>
+
+
+<% end %>

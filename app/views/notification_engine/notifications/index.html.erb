@@ -1,0 +1,86 @@
+<section class="vh-100" style="background-color: #eee;">
+  <div class="container h-80">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-lg-12 col-xl-11">
+        <div class="card text-black" style="border-radius: 25px;">
+          <div class="card-body">
+            <div class="row justify-content-center">
+              <div class="col-md-12 col-lg-8 col-xl-6 order-2 order-lg-1">
+                <p class="text-center h2 fw-bold mb-5 mx-1 mx-md-4 mt-4 text-secondary">Notifications</p>
+                <p id="notice"><%= notice %></p>
+                <%= button_to "logout", destroy_session_path(current_user), method: :delete , class: "btn btn-info text-white"%>
+                <%= form_tag destroy_multiple_notifications_path, method: :delete, remote: true do %>
+
+                  <table class="table table-responsive">
+                    <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Content</th>
+                      <th>Importance</th>
+                      <th>Day</th>
+                      <th>Tag</th>
+                      <th colspan="1"></th>
+                      <th data-sort-ignore="true">
+                        <input type="checkbox" id="selectAll"></input>
+                      </th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <% @notifications.each do |notification| %>
+                      <tr>
+                        <td><%= notification.title %></td>
+                        <td><%= notification.content %></td>
+                        <td><%= notification.importance %></td>
+                        <td><%= notification.day %></td>
+                        <td><%= notification.tag %></td>
+                        <td><%= link_to 'Show', notification %></td>
+                        <td>
+                          <%= check_box_tag "notification_ids[]", notification.id, false, class: 'select-ids' %>
+                        </td>
+                      </tr>
+                    <% end %>
+                    </tbody>
+                  </table>
+                  <% if current_user.has_role?(:admin) %>
+                    <%= link_to 'New Notification', new_notification_path, class: "btn btn-primary text-white" %>
+                  <% end %>
+                  <%= submit_tag "Delete selected", :disabled => true, :class => 'delete_all btn btn-danger mx-3' , data: { confirm: 'Are tou sure?' } %>
+                  <br>
+                <% end %>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+
+$(document).ready(function (){
+    $('#selectAll').on("change", function(){
+        var cbxs = $('.select-ids');
+        cbxs.prop("checked", !cbxs.prop("checked"));
+        enableDisableDeleteAction($(this).prop('checked'))
+    });
+
+    $('.select-ids').on("change", function(){
+        var atLeastOneIsChecked = $('.select-ids:checkbox:checked').length > 0;
+        enableDisableDeleteAction(atLeastOneIsChecked)
+    });
+
+})
+function enableDisableDeleteAction(checked) {
+    if (checked){
+        $('.delete_all').removeAttr('disabled')
+    }else {
+        $('.delete_all').attr('disabled', 'disabled')
+    }
+}
+</script>
+

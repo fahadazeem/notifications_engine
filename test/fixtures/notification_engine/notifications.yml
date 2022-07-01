@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  content: MyString
+  importance: 1
+  day: 2022-06-29 14:03:46
+  tag: MyString
+  user_id: 1
+
+two:
+  title: MyString
+  content: MyString
+  importance: 1
+  day: 2022-06-29 14:03:46
+  tag: MyString
+  user_id: 1
